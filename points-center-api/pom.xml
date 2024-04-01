@@ -6,9 +6,22 @@
     <parent>
         <groupId>fun.pullock</groupId>
         <artifactId>points-center</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>points-center-api</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>fun.pullock</groupId>
+            <artifactId>general-model-starter</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>

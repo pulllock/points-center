@@ -1,0 +1,14 @@
+### 发放积分
+POST http://localhost:8080/rpc/points/grant
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "configId": 1,
+  "channelCode": "incentive",
+  "number": 10,
+  "source": "incentive",
+  "uniqSourceId": {{$timestamp}},
+  "bizId": 1,
+  "bizDescription": "每日登录"
+}
