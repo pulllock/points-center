@@ -1,2 +1,3 @@
-# points_center
+# points-center
+
 积分中心
