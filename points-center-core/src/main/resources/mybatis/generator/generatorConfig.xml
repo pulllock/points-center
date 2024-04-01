@@ -46,5 +46,29 @@
             <!-- 防止生成的sql中多了表名 -->
             <property name="ignoreQualifiersAtRuntime" value="true"/>
         </table>
+
+        <table catalog="points_center" tableName="points_config" domainObjectName="PointsConfigDO" mapperName="PointsConfigMapper"
+               enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+            <!-- 防止生成的sql中多了表名 -->
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+        </table>
+
+        <table catalog="points_center" tableName="user_points" domainObjectName="UserPointsDO" mapperName="UserPointsMapper"
+               enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+            <!-- 防止生成的sql中多了表名 -->
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+        </table>
+
+        <table catalog="points_center" tableName="user_points_detail" domainObjectName="UserPointsDetailDO" mapperName="UserPointsDetailMapper"
+               enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+            <!-- 防止生成的sql中多了表名 -->
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+        </table>
+
+        <table catalog="points_center" tableName="user_points_log" domainObjectName="UserPointsLogDO" mapperName="UserPointsLogMapper"
+               enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+            <!-- 防止生成的sql中多了表名 -->
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+        </table>
     </context>
 </generatorConfiguration>
