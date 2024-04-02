@@ -148,6 +148,16 @@ public class PointsService {
         return true;
     }
 
+    public boolean rollback(RollbackParam param) {
+        // TODO
+        return false;
+    }
+
+    public boolean reclaim(ReclaimParam param) {
+        // TODO
+        return false;
+    }
+
     private long useUnlimited(UseParam param, long total, List<DetailDTO> using) {
         // 查询永久积分
         List<DetailDTO> unLimited = queryUnlimited(param);
@@ -214,16 +224,6 @@ public class PointsService {
         target.setUsed(source.getTotal());
         target.setCurrentUsed(source.getTotal() - source.getUsed());
         return target;
-    }
-
-    public boolean rollback(RollbackParam param) {
-        // TODO
-        return false;
-    }
-
-    public boolean reclaim(ReclaimParam param) {
-        // TODO
-        return false;
     }
 
     private void updateLogDetail(List<LogDetailDTO> using, LogDTO log) {
