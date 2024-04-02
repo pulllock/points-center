@@ -230,4 +230,12 @@
         detail = #{detail,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_points_log
+    where user_id = #{userId,jdbcType=BIGINT}
+    order by id desc
+  </select>
 </mapper>

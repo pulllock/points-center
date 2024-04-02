@@ -228,4 +228,12 @@
        #{id}
      </foreach>
   </delete>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_points_detail
+    where user_id = #{userId,jdbcType=BIGINT}
+    order by id desc
+  </select>
 </mapper>

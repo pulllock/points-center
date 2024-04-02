@@ -4,7 +4,6 @@ import fun.pullock.points.core.dao.model.UserPointsDetailDO;
 import org.apache.ibatis.annotations.Param;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 public interface UserPointsDetailMapper {
@@ -28,4 +27,6 @@ public interface UserPointsDetailMapper {
     int use(@Param("id") Long id, @Param("used") Long used);
 
     void deleteByIds(@Param("ids") List<Long> ids);
+
+    List<UserPointsDetailDO> selectAll(@Param("userId") Long userId);
 }

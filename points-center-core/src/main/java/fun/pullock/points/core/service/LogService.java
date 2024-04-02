@@ -4,13 +4,15 @@ import fun.pullock.api.enums.ErrorCode;
 import fun.pullock.general.model.ServiceException;
 import fun.pullock.points.core.dao.mapper.UserPointsLogMapper;
 import fun.pullock.points.core.dao.model.UserPointsLogDO;
-import fun.pullock.points.core.model.dto.DetailDTO;
 import fun.pullock.points.core.model.dto.LogDTO;
 import fun.pullock.points.core.model.dto.LogDetailDTO;
 import fun.pullock.starter.json.Json;
 import jakarta.annotation.Resource;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LogService {
@@ -19,7 +21,7 @@ public class LogService {
     private UserPointsLogMapper userPointsLogMapper;
 
     public LogDTO queryByUniqueKey(Long userId, String source, String uniqueSourceId) {
-        return toUserPointsLogDTO(userPointsLogMapper.selectByUniqueKey(userId, source, uniqueSourceId));
+        return toLogDTO(userPointsLogMapper.selectByUniqueKey(userId, source, uniqueSourceId));
     }
 
     public void create(LogDTO log) {
@@ -50,7 +52,15 @@ public class LogService {
         return userPointsLogMapper.updateStatus(newStatus, oldStatus, id);
     }
 
-    private LogDTO toUserPointsLogDTO(UserPointsLogDO source) {
+    public boolean updateDetail(Long id, String detail) {
+        return userPointsLogMapper.updateDetail(id, detail) == 1;
+    }
+
+    public List<LogDTO> history(Long userId) {
+        return userPointsLogMapper.selectAll(userId).stream().map(this::toLogDTO).collect(Collectors.toList());
+    }
+
+    private LogDTO toLogDTO(UserPointsLogDO source) {
         if (source == null) {
             return null;
         }
@@ -71,9 +81,5 @@ public class LogService {
         target.setStatus(source.getStatus());
         target.setDetail(Json.toArray(source.getDetail(), LogDetailDTO.class));
         return target;
-    }
-
-    public boolean updateDetail(Long id, String detail) {
-        return userPointsLogMapper.updateDetail(id, detail) == 1;
     }
 }

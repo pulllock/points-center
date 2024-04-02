@@ -4,6 +4,7 @@ import fun.pullock.api.enums.ErrorCode;
 import fun.pullock.general.model.ServiceException;
 import fun.pullock.points.core.dao.mapper.UserPointsDetailMapper;
 import fun.pullock.points.core.dao.model.UserPointsDetailDO;
+import fun.pullock.points.core.model.app.vo.PointsDetailVO;
 import fun.pullock.points.core.model.dto.DetailDTO;
 import fun.pullock.points.core.model.dto.LogDetailDTO;
 import jakarta.annotation.Resource;
@@ -80,6 +81,13 @@ public class DetailService {
         UserPointsDetailDO detailDO = new UserPointsDetailDO();
         BeanUtils.copyProperties(detail, detailDO);
         return userPointsDetailMapper.updateByPrimaryKey(detailDO) == 1;
+    }
+
+    public List<DetailDTO> queryDetail(Long userId) {
+        return userPointsDetailMapper.selectAll(userId)
+                .stream()
+                .map(this::toDetailDTO)
+                .collect(Collectors.toList());
     }
 
     private DetailDTO toDetailDTO(UserPointsDetailDO source) {
