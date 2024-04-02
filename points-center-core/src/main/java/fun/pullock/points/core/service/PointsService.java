@@ -81,18 +81,13 @@ public class PointsService {
 
     @Transactional
     public boolean use(UseParam param) {
-        // 查询积分日志
-        LogDTO log = logService.queryByUniqueKey(
-                param.getUserId(), param.getSource(), param.getuniqueSourceId()
-        );
-        if (log != null) {
-            throw new ServiceException(CONCURRENCY_ERROR, "重复请求");
-        }
+        // 检查是否重复请求
+        checkLog(param);
 
         LocalDateTime now = LocalDateTime.now();
 
         // 插入积分日志
-        log = createLog(param, now);
+        LogDTO log = createLog(param, now);
 
         // 校验渠道
         checkChannel(param.getChannelCode());
@@ -101,54 +96,24 @@ public class PointsService {
         redisLock.lock(lockKey, 60 * 1000);
         try {
             // 查询带有有效期的积分记录
-            List<DetailDTO> expiring = detailService.queryExpiring(param.getUserId(), now);
-
-            // 过滤掉没有可用积分的记录
-            expiring = expiring.stream()
-                    .filter(d -> !Objects.equals(d.getTotal(), d.getUsed()))
-                    .collect(Collectors.toList());
+            List<DetailDTO> expiring = queryExpiring(param, now);
 
             List<DetailDTO> using = new ArrayList<>();
-            Long total = 0L;
-            for (DetailDTO detail : expiring) {
-                total = total + (detail.getTotal() - detail.getUsed());
-                using.add(detail);
-                if (total >= param.getNumber()) {
-                    break;
-                }
-            }
+            long total = useExpiring(param, expiring, using);
 
             // 即将过期的可用积分不足，继续查询永久积分
             if (total < param.getNumber()) {
-                // 查询永久积分
-                List<DetailDTO> unLimited = detailService.queryUnlimited(param.getUserId());
-
-                // 过滤掉没有可用积分的记录
-                unLimited = unLimited.stream()
-                        .filter(d -> !Objects.equals(d.getTotal(), d.getUsed()))
-                        .collect(Collectors.toList());
-
-                for (DetailDTO detail : unLimited) {
-                    total = total + (detail.getTotal() - detail.getUsed());
-                    using.add(detail);
-                    if (total >= param.getNumber()) {
-                        break;
-                    }
-                }
+                total = useUnlimited(param, total, using);
             }
-
-            DetailDTO split = null;
 
             // 可用积分不足
             if (total < param.getNumber()) {
                 throw new ServiceException(PARAM_ERROR);
             }
-            // 刚好等于要使用的积分
-            else if (total == param.getNumber()) {
-                // do nothing
-            }
+
+            DetailDTO split = null;
             // 大于要使用的积分
-            else {
+            if (total > param.getNumber()) {
                 split = using.remove(using.size() - 1);
             }
 
@@ -181,6 +146,62 @@ public class PointsService {
             redisLock.unlock(lockKey);
         }
         return true;
+    }
+
+    private long useUnlimited(UseParam param, long total, List<DetailDTO> using) {
+        // 查询永久积分
+        List<DetailDTO> unLimited = queryUnlimited(param);
+
+        for (DetailDTO detail : unLimited) {
+            total = total + (detail.getTotal() - detail.getUsed());
+            using.add(detail);
+            if (total >= param.getNumber()) {
+                break;
+            }
+        }
+        return total;
+    }
+
+    private long useExpiring(UseParam param, List<DetailDTO> expiring, List<DetailDTO> using) {
+        long total = 0;
+        for (DetailDTO detail : expiring) {
+            total = total + (detail.getTotal() - detail.getUsed());
+            using.add(detail);
+            if (total >= param.getNumber()) {
+                break;
+            }
+        }
+        return total;
+    }
+
+    private List<DetailDTO> queryUnlimited(UseParam param) {
+        List<DetailDTO> unLimited = detailService.queryUnlimited(param.getUserId());
+
+        // 过滤掉没有可用积分的记录
+        unLimited = unLimited.stream()
+                .filter(d -> !Objects.equals(d.getTotal(), d.getUsed()))
+                .collect(Collectors.toList());
+        return unLimited;
+    }
+
+    private List<DetailDTO> queryExpiring(UseParam param, LocalDateTime now) {
+        List<DetailDTO> expiring = detailService.queryExpiring(param.getUserId(), now);
+
+        // 过滤掉没有可用积分的记录
+        expiring = expiring.stream()
+                .filter(d -> !Objects.equals(d.getTotal(), d.getUsed()))
+                .collect(Collectors.toList());
+        return expiring;
+    }
+
+    private void checkLog(UseParam param) {
+        // 查询积分日志
+        LogDTO log = logService.queryByUniqueKey(
+                param.getUserId(), param.getSource(), param.getuniqueSourceId()
+        );
+        if (log != null) {
+            throw new ServiceException(CONCURRENCY_ERROR, "重复请求");
+        }
     }
 
     private LogDetailDTO toLogDetailDTO(DetailDTO source) {
