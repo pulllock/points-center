@@ -39,17 +39,12 @@ public class LogService {
             logDO.setUniqueSourceId(log.getUniqueSourceId());
             logDO.setBizId(log.getBizId());
             logDO.setBizDescription(log.getBizDescription());
-            logDO.setStatus(log.getStatus());
             logDO.setDetail(Json.toJson(log.getDetail()));
             userPointsLogMapper.insertSelective(logDO);
             log.setId(logDO.getId());
         } catch (DuplicateKeyException e) {
             throw new ServiceException(ErrorCode.CONCURRENCY_ERROR);
         }
-    }
-
-    public boolean updateStatus(int newStatus, int oldStatus, Long id) {
-        return userPointsLogMapper.updateStatus(newStatus, oldStatus, id);
     }
 
     public boolean updateDetail(Long id, String detail) {
@@ -78,7 +73,6 @@ public class LogService {
         target.setUniqueSourceId(source.getUniqueSourceId());
         target.setBizId(source.getBizId());
         target.setBizDescription(source.getBizDescription());
-        target.setStatus(source.getStatus());
         target.setDetail(Json.toArray(source.getDetail(), LogDetailDTO.class));
         return target;
     }

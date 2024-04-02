@@ -32,7 +32,5 @@ public class LogDTO {
 
     private String bizDescription;
 
-    private Integer status;
-
     private List<LogDetailDTO> detail;
 }

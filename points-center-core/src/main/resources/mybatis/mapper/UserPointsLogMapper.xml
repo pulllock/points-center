@@ -14,13 +14,12 @@
     <result column="unique_source_id" jdbcType="VARCHAR" property="uniqueSourceId" />
     <result column="biz_id" jdbcType="BIGINT" property="bizId" />
     <result column="biz_description" jdbcType="VARCHAR" property="bizDescription" />
-    <result column="status" jdbcType="SMALLINT" property="status" />
     <result column="detail" jdbcType="LONGVARCHAR" property="detail" />
   </resultMap>
 
   <sql id="Base_Column_List">
     id, create_time, update_time, user_id, config_id, channel_code, type, number, source, 
-    unique_source_id, biz_id, biz_description, status, detail
+    unique_source_id, biz_id, biz_description, detail
   </sql>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -41,13 +40,13 @@
       user_id, config_id, channel_code, 
       type, number, source, 
       unique_source_id, biz_id, biz_description,
-      status, detail
+      detail
     ) values (
       #{id,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
       #{userId,jdbcType=BIGINT}, #{configId,jdbcType=BIGINT}, #{channelCode,jdbcType=VARCHAR}, 
       #{type,jdbcType=SMALLINT}, #{number,jdbcType=BIGINT}, #{source,jdbcType=VARCHAR}, 
       #{uniqueSourceId,jdbcType=VARCHAR}, #{bizId,jdbcType=BIGINT}, #{bizDescription,jdbcType=VARCHAR},
-      #{status,jdbcType=SMALLINT}, #{detail,jdbcType=LONGVARCHAR}
+      #{detail,jdbcType=LONGVARCHAR}
     )
   </insert>
 
@@ -90,9 +89,6 @@
       <if test="bizDescription != null">
         biz_description,
       </if>
-      <if test="status != null">
-        status,
-      </if>
       <if test="detail != null">
         detail,
       </if>
@@ -133,9 +129,6 @@
       </if>
       <if test="bizDescription != null">
         #{bizDescription,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=SMALLINT},
       </if>
       <if test="detail != null">
         #{detail,jdbcType=LONGVARCHAR},
@@ -179,9 +172,6 @@
       <if test="bizDescription != null">
         biz_description = #{bizDescription,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
-        status = #{status,jdbcType=SMALLINT},
-      </if>
       <if test="detail != null">
         detail = #{detail,jdbcType=LONGVARCHAR},
       </if>
@@ -202,7 +192,6 @@
       unique_source_id = #{uniqueSourceId,jdbcType=VARCHAR},
       biz_id = #{bizId,jdbcType=BIGINT},
       biz_description = #{bizDescription,jdbcType=VARCHAR},
-      status = #{status,jdbcType=SMALLINT},
       detail = #{detail,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -215,14 +204,6 @@
       and source = #{source,jdbcType=VARCHAR}
       and unique_source_id = #{uniqueSourceId,jdbcType=VARCHAR}
   </select>
-
-  <update id="updateStatus">
-    update user_points_log
-    set update_time = now(),
-        status = #{newStatus,jdbcType=SMALLINT}
-    where id = #{id,jdbcType=BIGINT}
-      and status = #{oldStatus,jdbcType=SMALLINT}
-  </update>
 
   <update id="updateDetail">
     update user_points_log

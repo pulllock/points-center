@@ -67,8 +67,7 @@ CREATE TABLE user_points_log (
   biz_id           bigint(20)                         NOT NULL COMMENT '业务ID', 
   biz_description  varchar(255)                       NOT NULL COMMENT '业务描述', 
   detail           json                                        DEFAULT NULL COMMENT '用户积分明细', 
-  status           smallint(6)                        NOT NULL DEFAULT 1 COMMENT '状态，取值：1-处理中 2-失败 3-完成', 
-  PRIMARY KEY (id), 
+  PRIMARY KEY (id),
   KEY idx_user_config_channel (user_id, config_id, channel_code),
   UNIQUE KEY uniq_user_source_id (user_id, source, unique_source_id)
 ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4 COMMENT = '用户积分日志';

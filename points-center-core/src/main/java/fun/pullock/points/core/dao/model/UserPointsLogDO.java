@@ -31,7 +31,5 @@ public class UserPointsLogDO {
 
     private String bizDescription;
 
-    private Integer status;
-
     private String detail;
 }

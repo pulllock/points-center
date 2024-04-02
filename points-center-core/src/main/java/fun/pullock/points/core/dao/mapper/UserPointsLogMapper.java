@@ -26,12 +26,6 @@ public interface UserPointsLogMapper {
             @Param("uniqueSourceId") String uniqueSourceId
     );
 
-    boolean updateStatus(
-            @Param("newStatus") int newStatus,
-            @Param("oldStatus") int oldStatus,
-            @Param("id") Long id
-    );
-
     int updateDetail(@Param("id") Long id, @Param("detail") String detail);
 
     List<UserPointsLogDO> selectAll(@Param("userId") Long userId);
