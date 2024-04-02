@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 @Getter
 public enum ConfigType {
-    UN_LIMIT(1, "永久积分"),
+    UNLIMITED(1, "永久积分"),
     ACTIVITY(2, "活动积分"),
     ;
 

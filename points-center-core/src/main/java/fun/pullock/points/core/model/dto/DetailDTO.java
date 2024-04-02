@@ -21,7 +21,9 @@ public class DetailDTO {
 
     private LocalDateTime expireTime;
 
-    private Long number;
+    private Long total;
+
+    private Long used;
 
     private String source;
 

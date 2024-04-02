@@ -2,6 +2,11 @@ package fun.pullock.api.enums;
 
 import fun.pullock.general.model.BaseErrorCode;
 
+/**
+ * 错误码
+ * 通用错误码范围：0-9999，其中0表示成功
+ * 具体的业务错误码从10000开始
+ */
 public enum ErrorCode implements BaseErrorCode {
 
     SYSTEM_ERROR(1, "系统错误"),
@@ -9,7 +14,7 @@ public enum ErrorCode implements BaseErrorCode {
     CONCURRENCY_ERROR(3, "并发错误"),
 
 
-
+    POINTS_INSUFFICIENT(10000, "积分数量不够"),
     ;
 
     ErrorCode(int errorCode, String errorMsg) {

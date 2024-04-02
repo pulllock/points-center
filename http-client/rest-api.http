@@ -12,3 +12,17 @@ Content-Type: application/json
   "bizId": 1,
   "bizDescription": "每日登录"
 }
+
+### 使用积分
+POST http://localhost:8080/rpc/points/use
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "channelCode": "incentive",
+  "number": 14,
+  "source": "incentive",
+  "uniqueSourceId": {{$timestamp}},
+  "bizId": 1,
+  "bizDescription": "购买商品"
+}

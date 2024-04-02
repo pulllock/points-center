@@ -146,4 +146,11 @@
         total = total + #{number}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <update id="use">
+    update user_points
+    set update_time = now(),
+        used = used + #{number}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
 </mapper>

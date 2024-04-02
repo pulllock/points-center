@@ -9,6 +9,10 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.constructor.DuplicateKeyException;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class DetailService {
 
@@ -24,7 +28,7 @@ public class DetailService {
             detailDO.setConfigId(detail.getConfigId());
             detailDO.setChannelCode(detail.getChannelCode());
             detailDO.setExpireTime(detail.getExpireTime());
-            detailDO.setNumber(detail.getNumber());
+            detailDO.setTotal(detail.getTotal());
             detailDO.setSource(detail.getSource());
             detailDO.setUniqueSourceId(detail.getUniqueSourceId());
             detailDO.setBizId(detail.getBizId());
@@ -36,5 +40,48 @@ public class DetailService {
         } catch (DuplicateKeyException e) {
             throw new ServiceException(ErrorCode.CONCURRENCY_ERROR, "重复请求");
         }
+    }
+
+    public List<DetailDTO> queryExpiring(Long userId, LocalDateTime now) {
+        return userPointsDetailMapper.selectExpiring(userId, now)
+                .stream()
+                .map(this::toDetailDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<DetailDTO> queryUnlimited(Long userId) {
+        return userPointsDetailMapper.selectUnlimited(userId)
+                .stream()
+                .map(this::toDetailDTO)
+                .collect(Collectors.toList());
+    }
+
+    public boolean use(Long id, Long used) {
+        return userPointsDetailMapper.use(id, used) == 1;
+    }
+
+    public void deleteByIds(List<Long> ids) {
+        userPointsDetailMapper.deleteByIds(ids);
+    }
+
+    private DetailDTO toDetailDTO(UserPointsDetailDO source) {
+        if (source == null) {
+            return null;
+        }
+
+        DetailDTO target = new DetailDTO();
+        target.setId(source.getId());
+        target.setCreateTime(source.getCreateTime());
+        target.setUpdateTime(source.getUpdateTime());
+        target.setUserId(source.getUserId());
+        target.setConfigId(source.getConfigId());
+        target.setChannelCode(source.getChannelCode());
+        target.setTotal(source.getTotal());
+        target.setUsed(source.getUsed());
+        target.setSource(source.getSource());
+        target.setUniqueSourceId(target.getUniqueSourceId());
+        target.setBizId(source.getBizId());
+        target.setBizDescription(source.getBizDescription());
+        return target;
     }
 }

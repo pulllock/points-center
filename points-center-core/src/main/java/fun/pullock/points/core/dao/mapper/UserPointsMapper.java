@@ -22,4 +22,6 @@ public interface UserPointsMapper {
     void insertOrUpdate(UserPointsDO points);
 
     int grant(@Param("id") Long id, @Param("number") Long number);
+
+    void use(@Param("userId") Long userId, @Param("number") Long number);
 }
