@@ -50,8 +50,8 @@ public class PointsClientController implements PointsClient {
             throw new ServiceException(PARAM_ERROR, "source不能为空");
         }
 
-        if (StringUtils.isEmpty(param.getUniqSourceId())) {
-            throw new ServiceException(PARAM_ERROR, "uniqSourceId不能为空");
+        if (StringUtils.isEmpty(param.getuniqueSourceId())) {
+            throw new ServiceException(PARAM_ERROR, "uniqueSourceId不能为空");
         }
 
         if (param.getBizId() == null) {
@@ -87,8 +87,8 @@ public class PointsClientController implements PointsClient {
             throw new ServiceException(PARAM_ERROR, "source不能为空");
         }
 
-        if (StringUtils.isEmpty(param.getUniqSourceId())) {
-            throw new ServiceException(PARAM_ERROR, "uniqSourceId不能为空");
+        if (StringUtils.isEmpty(param.getuniqueSourceId())) {
+            throw new ServiceException(PARAM_ERROR, "uniqueSourceId不能为空");
         }
 
         if (param.getBizId() == null) {
@@ -122,12 +122,12 @@ public class PointsClientController implements PointsClient {
             throw new ServiceException(PARAM_ERROR, "source不能为空");
         }
 
-        if (StringUtils.isEmpty(param.getUniqSourceId())) {
-            throw new ServiceException(PARAM_ERROR, "uniqSourceId不能为空");
+        if (StringUtils.isEmpty(param.getuniqueSourceId())) {
+            throw new ServiceException(PARAM_ERROR, "uniqueSourceId不能为空");
         }
 
-        if (StringUtils.isEmpty(param.getOriginUniqSourceId())) {
-            throw new ServiceException(PARAM_ERROR, "originUniqSourceId不能为空");
+        if (StringUtils.isEmpty(param.getOriginuniqueSourceId())) {
+            throw new ServiceException(PARAM_ERROR, "originuniqueSourceId不能为空");
         }
 
         if (param.getBizId() == null) {
@@ -163,8 +163,8 @@ public class PointsClientController implements PointsClient {
             throw new ServiceException(PARAM_ERROR, "source不能为空");
         }
 
-        if (StringUtils.isEmpty(param.getUniqSourceId())) {
-            throw new ServiceException(PARAM_ERROR, "uniqSourceId不能为空");
+        if (StringUtils.isEmpty(param.getuniqueSourceId())) {
+            throw new ServiceException(PARAM_ERROR, "uniqueSourceId不能为空");
         }
 
         if (param.getBizId() == null) {

@@ -63,12 +63,12 @@ CREATE TABLE user_points_log (
   type             smallint(6)                        NOT NULL COMMENT '类型，取值：1-发放 2-使用 3-回退 4-回收', 
   number           bigint(20)                         NOT NULL COMMENT '数量', 
   source           varchar(20)                        NOT NULL COMMENT '来源', 
-  uniq_source_id   varchar(64)                        NOT NULL COMMENT '唯一来源ID', 
+  unique_source_id varchar(64)                        NOT NULL COMMENT '唯一来源ID',
   biz_id           bigint(20)                         NOT NULL COMMENT '业务ID', 
   biz_description  varchar(255)                       NOT NULL COMMENT '业务描述', 
   detail           json                                        DEFAULT NULL COMMENT '用户积分明细', 
   status           smallint(6)                        NOT NULL DEFAULT 1 COMMENT '状态，取值：1-处理中 2-失败 3-完成', 
   PRIMARY KEY (id), 
   KEY idx_user_config_channel (user_id, config_id, channel_code),
-  UNIQUE KEY uniq_user_source_id (user_id, source, uniq_source_id)
+  UNIQUE KEY uniq_user_source_id (user_id, source, unique_source_id)
 ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4 COMMENT = '用户积分日志';

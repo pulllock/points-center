@@ -1,11 +1,11 @@
-package fun.pullock.points.core.dao.model;
+package fun.pullock.points.core.model.dto;
 
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
-public class UserPointsLogDO {
+public class DetailDTO {
 
     private Long id;
 
@@ -19,7 +19,7 @@ public class UserPointsLogDO {
 
     private String channelCode;
 
-    private Integer type;
+    private LocalDateTime expireTime;
 
     private Long number;
 
@@ -30,8 +30,4 @@ public class UserPointsLogDO {
     private Long bizId;
 
     private String bizDescription;
-
-    private Integer status;
-
-    private String detail;
 }

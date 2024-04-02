@@ -1,6 +1,7 @@
 package fun.pullock.points.core.dao.mapper;
 
 import fun.pullock.points.core.dao.model.UserPointsDO;
+import org.apache.ibatis.annotations.Param;
 
 public interface UserPointsMapper {
 
@@ -15,4 +16,10 @@ public interface UserPointsMapper {
     int updateByPrimaryKeySelective(UserPointsDO row);
 
     int updateByPrimaryKey(UserPointsDO row);
+
+    UserPointsDO selectByUserId(Long userId);
+
+    void insertOrUpdate(UserPointsDO points);
+
+    int grant(@Param("id") Long id, @Param("number") Long number);
 }

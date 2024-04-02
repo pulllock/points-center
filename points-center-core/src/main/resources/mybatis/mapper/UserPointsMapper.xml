@@ -122,4 +122,28 @@
       expired = #{expired,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_points
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+
+  <insert id="insertOrUpdate" parameterType="fun.pullock.points.core.dao.model.UserPointsDO">
+    insert into user_points (
+      id, create_time, update_time,
+      user_id, total, used, expired
+    ) values (
+      null, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+      #{userId,jdbcType=BIGINT}, #{total,jdbcType=BIGINT}, #{used,jdbcType=BIGINT}, #{expired,jdbcType=BIGINT}
+   ) on duplicate key update total = #{total}, update_time = now()
+  </insert>
+
+  <update id="grant">
+    update user_points
+    set update_time = now(),
+        total = total + #{number}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
 </mapper>

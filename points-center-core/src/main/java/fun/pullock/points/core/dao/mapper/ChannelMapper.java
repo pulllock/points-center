@@ -15,4 +15,6 @@ public interface ChannelMapper {
     int updateByPrimaryKeySelective(ChannelDO row);
 
     int updateByPrimaryKey(ChannelDO row);
+
+    ChannelDO selectByCode(String code);
 }

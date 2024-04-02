@@ -8,7 +8,7 @@ Content-Type: application/json
   "channelCode": "incentive",
   "number": 10,
   "source": "incentive",
-  "uniqSourceId": {{$timestamp}},
+  "uniqueSourceId": {{$timestamp}},
   "bizId": 1,
   "bizDescription": "每日登录"
 }

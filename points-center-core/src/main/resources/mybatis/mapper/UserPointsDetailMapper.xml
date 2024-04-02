@@ -33,7 +33,7 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
 
-  <insert id="insert" parameterType="fun.pullock.points.core.dao.model.UserPointsDetailDO">
+  <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" parameterType="fun.pullock.points.core.dao.model.UserPointsDetailDO">
     insert into user_points_detail (
       id, create_time, update_time,
       user_id, config_id, channel_code, 
@@ -47,7 +47,7 @@
     )
   </insert>
 
-  <insert id="insertSelective" parameterType="fun.pullock.points.core.dao.model.UserPointsDetailDO">
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" useGeneratedKeys="true" parameterType="fun.pullock.points.core.dao.model.UserPointsDetailDO">
     insert into user_points_detail
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

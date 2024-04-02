@@ -11,7 +11,7 @@
     <result column="type" jdbcType="SMALLINT" property="type" />
     <result column="number" jdbcType="BIGINT" property="number" />
     <result column="source" jdbcType="VARCHAR" property="source" />
-    <result column="uniq_source_id" jdbcType="VARCHAR" property="uniqSourceId" />
+    <result column="unique_source_id" jdbcType="VARCHAR" property="uniqueSourceId" />
     <result column="biz_id" jdbcType="BIGINT" property="bizId" />
     <result column="biz_description" jdbcType="VARCHAR" property="bizDescription" />
     <result column="status" jdbcType="SMALLINT" property="status" />
@@ -20,7 +20,7 @@
 
   <sql id="Base_Column_List">
     id, create_time, update_time, user_id, config_id, channel_code, type, number, source, 
-    uniq_source_id, biz_id, biz_description, status, detail
+    unique_source_id, biz_id, biz_description, status, detail
   </sql>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -35,23 +35,23 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
 
-  <insert id="insert" parameterType="fun.pullock.points.core.dao.model.UserPointsLogDO">
+  <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" parameterType="fun.pullock.points.core.dao.model.UserPointsLogDO">
     insert into user_points_log (
       id, create_time, update_time,
       user_id, config_id, channel_code, 
       type, number, source, 
-      uniq_source_id, biz_id, biz_description, 
+      unique_source_id, biz_id, biz_description,
       status, detail
     ) values (
       #{id,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
       #{userId,jdbcType=BIGINT}, #{configId,jdbcType=BIGINT}, #{channelCode,jdbcType=VARCHAR}, 
       #{type,jdbcType=SMALLINT}, #{number,jdbcType=BIGINT}, #{source,jdbcType=VARCHAR}, 
-      #{uniqSourceId,jdbcType=VARCHAR}, #{bizId,jdbcType=BIGINT}, #{bizDescription,jdbcType=VARCHAR}, 
+      #{uniqueSourceId,jdbcType=VARCHAR}, #{bizId,jdbcType=BIGINT}, #{bizDescription,jdbcType=VARCHAR},
       #{status,jdbcType=SMALLINT}, #{detail,jdbcType=LONGVARCHAR}
     )
   </insert>
 
-  <insert id="insertSelective" parameterType="fun.pullock.points.core.dao.model.UserPointsLogDO">
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" useGeneratedKeys="true" parameterType="fun.pullock.points.core.dao.model.UserPointsLogDO">
     insert into user_points_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -81,8 +81,8 @@
       <if test="source != null">
         source,
       </if>
-      <if test="uniqSourceId != null">
-        uniq_source_id,
+      <if test="uniqueSourceId != null">
+        unique_source_id,
       </if>
       <if test="bizId != null">
         biz_id,
@@ -125,8 +125,8 @@
       <if test="source != null">
         #{source,jdbcType=VARCHAR},
       </if>
-      <if test="uniqSourceId != null">
-        #{uniqSourceId,jdbcType=VARCHAR},
+      <if test="uniqueSourceId != null">
+        #{uniqueSourceId,jdbcType=VARCHAR},
       </if>
       <if test="bizId != null">
         #{bizId,jdbcType=BIGINT},
@@ -170,8 +170,8 @@
       <if test="source != null">
         source = #{source,jdbcType=VARCHAR},
       </if>
-      <if test="uniqSourceId != null">
-        uniq_source_id = #{uniqSourceId,jdbcType=VARCHAR},
+      <if test="uniqueSourceId != null">
+        unique_source_id = #{uniqueSourceId,jdbcType=VARCHAR},
       </if>
       <if test="bizId != null">
         biz_id = #{bizId,jdbcType=BIGINT},
@@ -199,11 +199,35 @@
       type = #{type,jdbcType=SMALLINT},
       number = #{number,jdbcType=BIGINT},
       source = #{source,jdbcType=VARCHAR},
-      uniq_source_id = #{uniqSourceId,jdbcType=VARCHAR},
+      unique_source_id = #{uniqueSourceId,jdbcType=VARCHAR},
       biz_id = #{bizId,jdbcType=BIGINT},
       biz_description = #{bizDescription,jdbcType=VARCHAR},
       status = #{status,jdbcType=SMALLINT},
       detail = #{detail,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectByUniqueKey" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_points_log
+    where user_id = #{userId,jdbcType=BIGINT}
+      and source = #{source,jdbcType=VARCHAR}
+      and unique_source_id = #{uniqueSourceId,jdbcType=VARCHAR}
+  </select>
+
+  <update id="updateStatus">
+    update user_points_log
+    set update_time = now(),
+        status = #{newStatus,jdbcType=SMALLINT}
+    where id = #{id,jdbcType=BIGINT}
+      and status = #{oldStatus,jdbcType=SMALLINT}
+  </update>
+
+  <update id="updateDetail">
+    update user_points_log
+    set update_time = now(),
+        detail = #{detail,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

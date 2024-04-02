@@ -14,7 +14,7 @@ public class GrantParam implements Serializable {
 
     private String source;
 
-    private String uniqSourceId;
+    private String uniqueSourceId;
 
     private Long bizId;
 
@@ -60,12 +60,12 @@ public class GrantParam implements Serializable {
         this.source = source;
     }
 
-    public String getUniqSourceId() {
-        return uniqSourceId;
+    public String getuniqueSourceId() {
+        return uniqueSourceId;
     }
 
-    public void setUniqSourceId(String uniqSourceId) {
-        this.uniqSourceId = uniqSourceId;
+    public void setuniqueSourceId(String uniqueSourceId) {
+        this.uniqueSourceId = uniqueSourceId;
     }
 
     public Long getBizId() {
@@ -92,7 +92,7 @@ public class GrantParam implements Serializable {
                 ", channelCode='" + channelCode + '\'' +
                 ", number=" + number +
                 ", source='" + source + '\'' +
-                ", uniqSourceId='" + uniqSourceId + '\'' +
+                ", uniqueSourceId='" + uniqueSourceId + '\'' +
                 ", bizId=" + bizId +
                 ", bizDescription='" + bizDescription + '\'' +
                 '}';
