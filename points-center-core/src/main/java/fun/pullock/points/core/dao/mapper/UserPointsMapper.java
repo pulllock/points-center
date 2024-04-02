@@ -24,4 +24,6 @@ public interface UserPointsMapper {
     int grant(@Param("id") Long id, @Param("number") Long number);
 
     void use(@Param("userId") Long userId, @Param("number") Long number);
+
+    void rollback(@Param("userId") Long userId, @Param("used") Long currentUsed, @Param("expired") Long expired);
 }

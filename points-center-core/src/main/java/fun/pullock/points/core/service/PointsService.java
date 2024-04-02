@@ -28,8 +28,7 @@ import static fun.pullock.points.core.enums.ConfigStatus.ENABLE;
 import static fun.pullock.points.core.enums.ConfigType.UNLIMITED;
 import static fun.pullock.points.core.enums.ExpirationRuleType.FIX;
 import static fun.pullock.points.core.enums.ExpirationRuleType.RELATIVE;
-import static fun.pullock.points.core.enums.LogType.GRANT;
-import static fun.pullock.points.core.enums.LogType.USE;
+import static fun.pullock.points.core.enums.LogType.*;
 
 @Service
 public class PointsService {
@@ -148,14 +147,105 @@ public class PointsService {
         return true;
     }
 
+    @Transactional
     public boolean rollback(RollbackParam param) {
-        // TODO
-        return false;
+        // 检查要回滚的日志
+        LogDTO origin = checkOriginLog(param);
+
+        // 检查是否重复请求
+        checkLog(param);
+
+        LocalDateTime now = LocalDateTime.now();
+
+        // 插入积分日志
+        LogDTO log = createLog(param, now, origin);
+
+        // 校验渠道
+        checkChannel(param.getChannelCode());
+
+        String lockKey = String.format("PointsRollback::%s", param.getUserId());
+        redisLock.lock(lockKey, 60 * 1000);
+        try {
+            List<LogDetailDTO> details = origin.getDetail();
+            Long used = 0L;
+            Long expired = 0L;
+            for (LogDetailDTO logDetail : details) {
+                logDetail.setUpdateTime(now);
+                // 回滚详情
+                DetailDTO detail = detailService.queryById(logDetail.getId());
+                if (detail == null) {
+                    logDetail.setUsed(logDetail.getUsed() - logDetail.getCurrentUsed());
+                    logDetail.setCurrentUsed(0L);
+                    detailService.rollback(logDetail);
+                }
+                else {
+                    detail.setUsed(detail.getUsed() - logDetail.getCurrentUsed());
+                    detail.setUpdateTime(now);
+                    detailService.rollback(detail);
+
+                    logDetail.setUsed(logDetail.getUsed() - logDetail.getCurrentUsed());
+                    logDetail.setCurrentUsed(0L);
+                }
+
+                // 如果已过期，则增加过期的数量
+                if (logDetail.getExpireTime() != null && logDetail.getExpireTime().isBefore(now)) {
+                    expired += logDetail.getCurrentUsed();
+                }
+                // 已使用的积分数量
+                used += logDetail.getCurrentUsed();
+            }
+            // 回滚已使用积分数量和增加过期数量
+            userPointsMapper.rollback(param.getUserId(), used, expired);
+
+            // 更新日志
+            updateLogDetail(details, log);
+        } finally {
+            redisLock.unlock(lockKey);
+        }
+
+        return true;
     }
 
     public boolean reclaim(ReclaimParam param) {
         // TODO
         return false;
+    }
+
+    private LogDTO checkOriginLog(RollbackParam param) {
+        // 查询积分日志
+        LogDTO log = logService.queryByUniqueKey(
+                param.getUserId(), param.getSource(), param.getOriginUniqueSourceId()
+        );
+        if (log == null) {
+            throw new ServiceException(PARAM_ERROR, "回滚数据不存在");
+        }
+
+        if (log.getType() != USE.getType()) {
+            throw new ServiceException(PARAM_ERROR, "回滚数据错误");
+        }
+
+        return log;
+    }
+
+    private LogDTO createLog(RollbackParam param, LocalDateTime now, LogDTO origin) {
+        LogDTO log = new LogDTO();
+        log.setCreateTime(now);
+        log.setUpdateTime(now);
+        log.setUserId(param.getUserId());
+        log.setConfigId(0L);
+        log.setChannelCode(param.getChannelCode());
+        log.setType(ROLLBACK.getType());
+        log.setNumber(origin.getNumber());
+        log.setSource(param.getSource());
+        log.setUniqueSourceId(param.getUniqueSourceId());
+        log.setBizId(param.getBizId());
+        log.setBizDescription(param.getBizDescription());
+        logService.create(log);
+        return log;
+    }
+
+    private void checkLog(RollbackParam param) {
+
     }
 
     private long useUnlimited(UseParam param, long total, List<DetailDTO> using) {

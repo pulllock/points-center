@@ -5,7 +5,9 @@ import fun.pullock.general.model.ServiceException;
 import fun.pullock.points.core.dao.mapper.UserPointsDetailMapper;
 import fun.pullock.points.core.dao.model.UserPointsDetailDO;
 import fun.pullock.points.core.model.dto.DetailDTO;
+import fun.pullock.points.core.model.dto.LogDetailDTO;
 import jakarta.annotation.Resource;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.constructor.DuplicateKeyException;
 
@@ -62,6 +64,22 @@ public class DetailService {
 
     public void deleteByIds(List<Long> ids) {
         userPointsDetailMapper.deleteByIds(ids);
+    }
+
+    public DetailDTO queryById(Long id) {
+        return toDetailDTO(userPointsDetailMapper.selectByPrimaryKey(id));
+    }
+
+    public boolean rollback(LogDetailDTO logDetail) {
+        UserPointsDetailDO detailDO = new UserPointsDetailDO();
+        BeanUtils.copyProperties(logDetail, detailDO);
+        return userPointsDetailMapper.insert(detailDO) == 1;
+    }
+
+    public boolean rollback(DetailDTO detail) {
+        UserPointsDetailDO detailDO = new UserPointsDetailDO();
+        BeanUtils.copyProperties(detail, detailDO);
+        return userPointsDetailMapper.updateByPrimaryKey(detailDO) == 1;
     }
 
     private DetailDTO toDetailDTO(UserPointsDetailDO source) {

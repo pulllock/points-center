@@ -153,4 +153,12 @@
         used = used + #{number}
     where user_id = #{userId,jdbcType=BIGINT}
   </update>
+
+  <update id="rollback">
+    update user_points
+    set update_time = now(),
+        used = used - #{used},
+        expired = expired + #{expired}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
 </mapper>
