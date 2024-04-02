@@ -54,18 +54,13 @@ public class PointsService {
 
     @Transactional
     public boolean grant(GrantParam param) {
-        // 查询积分日志
-        LogDTO log = logService.queryByUniqueKey(
-                param.getUserId(), param.getSource(), param.getuniqueSourceId()
-        );
-        if (log != null) {
-            throw new ServiceException(CONCURRENCY_ERROR, "重复请求");
-        }
+        // 检查是否重复请求
+        checkLog(param);
 
         LocalDateTime now = LocalDateTime.now();
 
         // 插入积分日志
-        log = createLog(param, now);
+        LogDTO log = createLog(param, now);
 
         // 校验渠道
         checkChannel(param.getChannelCode());
@@ -341,5 +336,15 @@ public class PointsService {
         log.setBizDescription(param.getBizDescription());
         logService.create(log);
         return log;
+    }
+
+    private void checkLog(GrantParam param) {
+        // 查询积分日志
+        LogDTO log = logService.queryByUniqueKey(
+                param.getUserId(), param.getSource(), param.getuniqueSourceId()
+        );
+        if (log != null) {
+            throw new ServiceException(CONCURRENCY_ERROR, "重复请求");
+        }
     }
 }
