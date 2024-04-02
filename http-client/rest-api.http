@@ -26,3 +26,12 @@ Content-Type: application/json
   "bizId": 1,
   "bizDescription": "购买商品"
 }
+
+### 查询概要
+GET http://localhost:8080/app/points/summary
+
+### 查询详情
+GET http://localhost:8080/app/points/detail
+
+### 查询历史
+GET http://localhost:8080/app/points/history

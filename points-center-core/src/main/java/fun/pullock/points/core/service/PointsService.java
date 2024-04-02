@@ -267,6 +267,7 @@ public class PointsService {
         target.setTotal(source.getTotal());
         target.setUsed(source.getUsed());
         target.setCurrentUsed(source.getCurrentUsed());
+        target.setBizDescription(source.getBizDescription());
         return target;
     }
 
