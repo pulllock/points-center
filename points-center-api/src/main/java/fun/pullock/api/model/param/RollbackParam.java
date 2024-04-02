@@ -12,7 +12,7 @@ public class RollbackParam implements Serializable {
 
     private String uniqueSourceId;
 
-    private String originuniqueSourceId;
+    private String originUniqueSourceId;
 
     private Long bizId;
 
@@ -42,20 +42,20 @@ public class RollbackParam implements Serializable {
         this.source = source;
     }
 
-    public String getuniqueSourceId() {
+    public String getUniqueSourceId() {
         return uniqueSourceId;
     }
 
-    public void setuniqueSourceId(String uniqueSourceId) {
+    public void setUniqueSourceId(String uniqueSourceId) {
         this.uniqueSourceId = uniqueSourceId;
     }
 
-    public String getOriginuniqueSourceId() {
-        return originuniqueSourceId;
+    public String getOriginUniqueSourceId() {
+        return originUniqueSourceId;
     }
 
-    public void setOriginuniqueSourceId(String originuniqueSourceId) {
-        this.originuniqueSourceId = originuniqueSourceId;
+    public void setOriginUniqueSourceId(String originUniqueSourceId) {
+        this.originUniqueSourceId = originUniqueSourceId;
     }
 
     public Long getBizId() {
@@ -81,7 +81,7 @@ public class RollbackParam implements Serializable {
                 ", channelCode='" + channelCode + '\'' +
                 ", source='" + source + '\'' +
                 ", uniqueSourceId='" + uniqueSourceId + '\'' +
-                ", originuniqueSourceId='" + originuniqueSourceId + '\'' +
+                ", originUniqueSourceId='" + originUniqueSourceId + '\'' +
                 ", bizId=" + bizId +
                 ", bizDescription='" + bizDescription + '\'' +
                 '}';

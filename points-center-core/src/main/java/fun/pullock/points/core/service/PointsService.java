@@ -207,7 +207,7 @@ public class PointsService {
     private void checkLog(UseParam param) {
         // 查询积分日志
         LogDTO log = logService.queryByUniqueKey(
-                param.getUserId(), param.getSource(), param.getuniqueSourceId()
+                param.getUserId(), param.getSource(), param.getUniqueSourceId()
         );
         if (log != null) {
             throw new ServiceException(CONCURRENCY_ERROR, "重复请求");
@@ -246,7 +246,7 @@ public class PointsService {
         log.setType(USE.getType());
         log.setNumber(param.getNumber());
         log.setSource(param.getSource());
-        log.setUniqueSourceId(param.getuniqueSourceId());
+        log.setUniqueSourceId(param.getUniqueSourceId());
         log.setBizId(param.getBizId());
         log.setBizDescription(param.getBizDescription());
         logService.create(log);
@@ -287,7 +287,7 @@ public class PointsService {
         detail.setChannelCode(param.getChannelCode());
         detail.setTotal(param.getNumber());
         detail.setSource(param.getSource());
-        detail.setUniqueSourceId(param.getuniqueSourceId());
+        detail.setUniqueSourceId(param.getUniqueSourceId());
         detail.setBizId(param.getBizId());
         detail.setBizDescription(param.getBizDescription());
 
@@ -352,7 +352,7 @@ public class PointsService {
         log.setType(GRANT.getType());
         log.setNumber(param.getNumber());
         log.setSource(param.getSource());
-        log.setUniqueSourceId(param.getuniqueSourceId());
+        log.setUniqueSourceId(param.getUniqueSourceId());
         log.setBizId(param.getBizId());
         log.setBizDescription(param.getBizDescription());
         logService.create(log);
@@ -362,7 +362,7 @@ public class PointsService {
     private void checkLog(GrantParam param) {
         // 查询积分日志
         LogDTO log = logService.queryByUniqueKey(
-                param.getUserId(), param.getSource(), param.getuniqueSourceId()
+                param.getUserId(), param.getSource(), param.getUniqueSourceId()
         );
         if (log != null) {
             throw new ServiceException(CONCURRENCY_ERROR, "重复请求");

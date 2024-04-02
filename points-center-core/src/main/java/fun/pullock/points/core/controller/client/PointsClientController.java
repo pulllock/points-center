@@ -1,7 +1,6 @@
 package fun.pullock.points.core.controller.client;
 
 import fun.pullock.api.client.PointsClient;
-import fun.pullock.api.enums.ErrorCode;
 import fun.pullock.api.model.param.GrantParam;
 import fun.pullock.api.model.param.ReclaimParam;
 import fun.pullock.api.model.param.RollbackParam;
@@ -50,7 +49,7 @@ public class PointsClientController implements PointsClient {
             throw new ServiceException(PARAM_ERROR, "source不能为空");
         }
 
-        if (StringUtils.isEmpty(param.getuniqueSourceId())) {
+        if (StringUtils.isEmpty(param.getUniqueSourceId())) {
             throw new ServiceException(PARAM_ERROR, "uniqueSourceId不能为空");
         }
 
@@ -87,7 +86,7 @@ public class PointsClientController implements PointsClient {
             throw new ServiceException(PARAM_ERROR, "source不能为空");
         }
 
-        if (StringUtils.isEmpty(param.getuniqueSourceId())) {
+        if (StringUtils.isEmpty(param.getUniqueSourceId())) {
             throw new ServiceException(PARAM_ERROR, "uniqueSourceId不能为空");
         }
 
@@ -122,12 +121,12 @@ public class PointsClientController implements PointsClient {
             throw new ServiceException(PARAM_ERROR, "source不能为空");
         }
 
-        if (StringUtils.isEmpty(param.getuniqueSourceId())) {
+        if (StringUtils.isEmpty(param.getUniqueSourceId())) {
             throw new ServiceException(PARAM_ERROR, "uniqueSourceId不能为空");
         }
 
-        if (StringUtils.isEmpty(param.getOriginuniqueSourceId())) {
-            throw new ServiceException(PARAM_ERROR, "originuniqueSourceId不能为空");
+        if (StringUtils.isEmpty(param.getOriginUniqueSourceId())) {
+            throw new ServiceException(PARAM_ERROR, "originUniqueSourceId不能为空");
         }
 
         if (param.getBizId() == null) {
@@ -163,7 +162,7 @@ public class PointsClientController implements PointsClient {
             throw new ServiceException(PARAM_ERROR, "source不能为空");
         }
 
-        if (StringUtils.isEmpty(param.getuniqueSourceId())) {
+        if (StringUtils.isEmpty(param.getUniqueSourceId())) {
             throw new ServiceException(PARAM_ERROR, "uniqueSourceId不能为空");
         }
 

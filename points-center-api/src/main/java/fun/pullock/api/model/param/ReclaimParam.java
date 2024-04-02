@@ -50,11 +50,11 @@ public class ReclaimParam implements Serializable {
         this.source = source;
     }
 
-    public String getuniqueSourceId() {
+    public String getUniqueSourceId() {
         return uniqueSourceId;
     }
 
-    public void setuniqueSourceId(String uniqueSourceId) {
+    public void setUniqueSourceId(String uniqueSourceId) {
         this.uniqueSourceId = uniqueSourceId;
     }
 
