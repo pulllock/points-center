@@ -3,10 +3,9 @@ package fun.pullock.points.core.model.dto;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
-public class LogDTO {
+public class LogDetailDTO {
 
     private Long id;
 
@@ -20,9 +19,13 @@ public class LogDTO {
 
     private String channelCode;
 
-    private Integer type;
+    private LocalDateTime expireTime;
 
-    private Long number;
+    private Long total;
+
+    private Long used;
+
+    private Long currentUsed;
 
     private String source;
 
@@ -31,8 +34,4 @@ public class LogDTO {
     private Long bizId;
 
     private String bizDescription;
-
-    private Integer status;
-
-    private List<LogDetailDTO> detail;
 }

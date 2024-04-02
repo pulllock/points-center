@@ -12,6 +12,7 @@ import fun.pullock.starter.json.Json;
 import fun.pullock.starter.redis.lock.RedisLock;
 import jakarta.annotation.Resource;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -156,8 +157,10 @@ public class PointsService {
                 split = using.remove(using.size() - 1);
             }
 
+            List<LogDetailDTO> logDetails = new ArrayList<>();
             // 删除这些记录
             if (CollectionUtils.isNotEmpty(using)) {
+                logDetails.addAll(using.stream().map(this::toLogDetailDTO).collect(Collectors.toList()));
                 detailService.deleteByIds(using.stream().map(DetailDTO::getId).collect(Collectors.toList()));
             }
 
@@ -167,18 +170,34 @@ public class PointsService {
                 detailService.use(split.getId(), used);
                 split.setUsed(split.getUsed() + used);
                 split.setUpdateTime(now);
-                using.add(split);
+
+                LogDetailDTO logDetail = new LogDetailDTO();
+                BeanUtils.copyProperties(split, logDetail);
+                logDetail.setCurrentUsed(used);
+                logDetails.add(logDetail);
             }
 
             // 更新用户积分
             userPointsMapper.use(param.getUserId(), param.getNumber());
 
             // 更新日志
-            updateLogDetail(using, log);
+            updateLogDetail(logDetails, log);
         } finally {
             redisLock.unlock(lockKey);
         }
         return true;
+    }
+
+    private LogDetailDTO toLogDetailDTO(DetailDTO source) {
+        if (source == null) {
+            return null;
+        }
+
+        LogDetailDTO target = new LogDetailDTO();
+        BeanUtils.copyProperties(source, target);
+        target.setUsed(source.getTotal());
+        target.setCurrentUsed(source.getTotal() - source.getUsed());
+        return target;
     }
 
     public boolean rollback(RollbackParam param) {
@@ -191,8 +210,8 @@ public class PointsService {
         return false;
     }
 
-    private void updateLogDetail(List<DetailDTO> using, LogDTO log) {
-        List<DetailDTO> details = log.getDetail();
+    private void updateLogDetail(List<LogDetailDTO> using, LogDTO log) {
+        List<LogDetailDTO> details = log.getDetail();
         if (details == null) {
             details = new ArrayList<>();
         }
@@ -219,8 +238,10 @@ public class PointsService {
     }
 
     private void updateLogDetail(DetailDTO detail, LogDTO log) {
-        List<DetailDTO> details = new ArrayList<>();
-        details.add(detail);
+        LogDetailDTO logDetail = new LogDetailDTO();
+        BeanUtils.copyProperties(detail, logDetail);
+        List<LogDetailDTO> details = new ArrayList<>();
+        details.add(logDetail);
         logService.updateDetail(log.getId(), Json.toJson(details));
     }
 

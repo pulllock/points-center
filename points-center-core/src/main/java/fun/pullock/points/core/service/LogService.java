@@ -6,6 +6,7 @@ import fun.pullock.points.core.dao.mapper.UserPointsLogMapper;
 import fun.pullock.points.core.dao.model.UserPointsLogDO;
 import fun.pullock.points.core.model.dto.DetailDTO;
 import fun.pullock.points.core.model.dto.LogDTO;
+import fun.pullock.points.core.model.dto.LogDetailDTO;
 import fun.pullock.starter.json.Json;
 import jakarta.annotation.Resource;
 import org.springframework.dao.DuplicateKeyException;
@@ -68,7 +69,7 @@ public class LogService {
         target.setBizId(source.getBizId());
         target.setBizDescription(source.getBizDescription());
         target.setStatus(source.getStatus());
-        target.setDetail(Json.toArray(source.getDetail(), DetailDTO.class));
+        target.setDetail(Json.toArray(source.getDetail(), LogDetailDTO.class));
         return target;
     }
 
