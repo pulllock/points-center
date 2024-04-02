@@ -137,7 +137,7 @@
     ) values (
       null, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
       #{userId,jdbcType=BIGINT}, #{total,jdbcType=BIGINT}, #{used,jdbcType=BIGINT}, #{expired,jdbcType=BIGINT}
-   ) on duplicate key update total = #{total}, update_time = now()
+   ) on duplicate key update total = total + #{total}, update_time = now()
   </insert>
 
   <update id="grant">
