@@ -35,3 +35,6 @@ GET http://localhost:8080/app/points/detail
 
 ### 查询历史
 GET http://localhost:8080/app/points/history
+
+### 查询配置
+GET http://localhost:8080/rpc/points/configs
