@@ -5,13 +5,20 @@ import fun.pullock.api.model.param.GrantParam;
 import fun.pullock.api.model.param.ReclaimParam;
 import fun.pullock.api.model.param.RollbackParam;
 import fun.pullock.api.model.param.UseParam;
+import fun.pullock.api.model.result.ExpirationRule;
+import fun.pullock.api.model.result.PointsConfig;
 import fun.pullock.general.model.ServiceException;
+import fun.pullock.points.core.model.dto.ConfigDTO;
+import fun.pullock.points.core.model.dto.ExpirationRuleDTO;
 import fun.pullock.points.core.service.PointsService;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static fun.pullock.api.enums.ErrorCode.PARAM_ERROR;
 
@@ -175,5 +182,41 @@ public class PointsClientController implements PointsClient {
         }
 
         return pointsService.reclaim(param);
+    }
+
+    @Override
+    public List<PointsConfig> configs() {
+        return pointsService.configs().stream().map(this::toPointsConfig).collect(Collectors.toList());
+    }
+
+    private PointsConfig toPointsConfig(ConfigDTO source) {
+        if (source == null) {
+            return null;
+        }
+
+        PointsConfig target = new PointsConfig();
+        target.setId(source.getId());
+        target.setCreateTime(source.getCreateTime());
+        target.setUpdateTime(source.getUpdateTime());
+        target.setChannelCode(source.getChannelCode());
+        target.setName(source.getName());
+        target.setDescription(source.getDescription());
+        target.setStatus(source.getStatus());
+        target.setType(source.getType());
+        target.setStock(source.getStock());
+        target.setExpirationRule(toExpirationRule(source.getExpirationRule()));
+        return target;
+    }
+
+    private ExpirationRule toExpirationRule(ExpirationRuleDTO source) {
+        if (source == null) {
+            return null;
+        }
+
+        ExpirationRule target = new ExpirationRule();
+        target.setType(source.getType());
+        target.setDays(source.getDays());
+        target.setExpirationTime(source.getExpirationTime());
+        return target;
     }
 }

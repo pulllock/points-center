@@ -8,6 +8,9 @@ import fun.pullock.starter.json.Json;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ConfigService {
 
@@ -16,6 +19,10 @@ public class ConfigService {
 
     public ConfigDTO queryById(Long id) {
         return toConfigDTO(pointsConfigMapper.selectByPrimaryKey(id));
+    }
+
+    public List<ConfigDTO> configs() {
+        return pointsConfigMapper.selectAll().stream().map(this::toConfigDTO).collect(Collectors.toList());
     }
 
     private ConfigDTO toConfigDTO(PointsConfigDO source) {

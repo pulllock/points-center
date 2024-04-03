@@ -159,4 +159,11 @@
       expiration_rule = #{expirationRule,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from points_config
+    order by id desc
+  </select>
 </mapper>

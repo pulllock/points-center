@@ -242,6 +242,10 @@ public class PointsService {
         );
     }
 
+    public List<ConfigDTO> configs() {
+        return configService.configs();
+    }
+
     private LogVO toLogVO(LogDTO source) {
         if (source == null) {
             return null;

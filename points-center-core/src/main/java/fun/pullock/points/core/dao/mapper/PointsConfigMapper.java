@@ -2,6 +2,9 @@ package fun.pullock.points.core.dao.mapper;
 
 import fun.pullock.points.core.dao.model.PointsConfigDO;
 
+import java.util.Arrays;
+import java.util.List;
+
 public interface PointsConfigMapper {
 
     int deleteByPrimaryKey(Long id);
@@ -15,4 +18,6 @@ public interface PointsConfigMapper {
     int updateByPrimaryKeySelective(PointsConfigDO row);
 
     int updateByPrimaryKey(PointsConfigDO row);
+
+    List<PointsConfigDO> selectAll();
 }
