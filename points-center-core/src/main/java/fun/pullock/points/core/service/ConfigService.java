@@ -1,15 +1,15 @@
 package fun.pullock.points.core.service;
 
+import fun.pullock.points.core.converters.ConfigConverter;
 import fun.pullock.points.core.dao.mapper.PointsConfigMapper;
-import fun.pullock.points.core.dao.model.PointsConfigDO;
 import fun.pullock.points.core.model.dto.ConfigDTO;
-import fun.pullock.points.core.model.dto.ExpirationRuleDTO;
-import fun.pullock.starter.json.Json;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static fun.pullock.points.core.converters.ConfigConverter.toConfigDTO;
 
 @Service
 public class ConfigService {
@@ -22,25 +22,6 @@ public class ConfigService {
     }
 
     public List<ConfigDTO> configs() {
-        return pointsConfigMapper.selectAll().stream().map(this::toConfigDTO).collect(Collectors.toList());
-    }
-
-    private ConfigDTO toConfigDTO(PointsConfigDO source) {
-        if (source == null) {
-            return null;
-        }
-
-        ConfigDTO target = new ConfigDTO();
-        target.setId(source.getId());
-        target.setCreateTime(source.getCreateTime());
-        target.setUpdateTime(source.getUpdateTime());
-        target.setName(source.getName());
-        target.setDescription(source.getDescription());
-        target.setChannelCode(source.getChannelCode());
-        target.setStatus(source.getStatus());
-        target.setType(source.getType());
-        target.setStock(source.getStock());
-        target.setExpirationRule(Json.toObject(source.getExpirationRule(), ExpirationRuleDTO.class));
-        return target;
+        return pointsConfigMapper.selectAll().stream().map(ConfigConverter::toConfigDTO).collect(Collectors.toList());
     }
 }

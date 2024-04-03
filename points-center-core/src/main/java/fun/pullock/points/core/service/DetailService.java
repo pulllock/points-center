@@ -2,9 +2,9 @@ package fun.pullock.points.core.service;
 
 import fun.pullock.api.enums.ErrorCode;
 import fun.pullock.general.model.ServiceException;
+import fun.pullock.points.core.converters.DetailConverter;
 import fun.pullock.points.core.dao.mapper.UserPointsDetailMapper;
 import fun.pullock.points.core.dao.model.UserPointsDetailDO;
-import fun.pullock.points.core.model.app.vo.PointsDetailVO;
 import fun.pullock.points.core.model.dto.DetailDTO;
 import fun.pullock.points.core.model.dto.LogDetailDTO;
 import jakarta.annotation.Resource;
@@ -16,6 +16,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static fun.pullock.points.core.converters.DetailConverter.toDetailDO;
+import static fun.pullock.points.core.converters.DetailConverter.toDetailDTO;
+
 @Service
 public class DetailService {
 
@@ -24,19 +27,7 @@ public class DetailService {
 
     public boolean create(DetailDTO detail) {
         try {
-            UserPointsDetailDO detailDO = new UserPointsDetailDO();
-            detailDO.setCreateTime(detail.getCreateTime());
-            detailDO.setUpdateTime(detailDO.getUpdateTime());
-            detailDO.setUserId(detail.getUserId());
-            detailDO.setConfigId(detail.getConfigId());
-            detailDO.setChannelCode(detail.getChannelCode());
-            detailDO.setExpireTime(detail.getExpireTime());
-            detailDO.setTotal(detail.getTotal());
-            detailDO.setSource(detail.getSource());
-            detailDO.setUniqueSourceId(detail.getUniqueSourceId());
-            detailDO.setBizId(detail.getBizId());
-            detailDO.setBizDescription(detail.getBizDescription());
-
+            UserPointsDetailDO detailDO = toDetailDO(detail);
             int result = userPointsDetailMapper.insertSelective(detailDO);
             detail.setId(detailDO.getId());
             return result == 1;
@@ -48,14 +39,14 @@ public class DetailService {
     public List<DetailDTO> queryExpiring(Long userId, LocalDateTime now) {
         return userPointsDetailMapper.selectExpiring(userId, now)
                 .stream()
-                .map(this::toDetailDTO)
+                .map(DetailConverter::toDetailDTO)
                 .collect(Collectors.toList());
     }
 
     public List<DetailDTO> queryUnlimited(Long userId) {
         return userPointsDetailMapper.selectUnlimited(userId)
                 .stream()
-                .map(this::toDetailDTO)
+                .map(DetailConverter::toDetailDTO)
                 .collect(Collectors.toList());
     }
 
@@ -86,28 +77,7 @@ public class DetailService {
     public List<DetailDTO> queryDetail(Long userId) {
         return userPointsDetailMapper.selectAll(userId)
                 .stream()
-                .map(this::toDetailDTO)
+                .map(DetailConverter::toDetailDTO)
                 .collect(Collectors.toList());
-    }
-
-    private DetailDTO toDetailDTO(UserPointsDetailDO source) {
-        if (source == null) {
-            return null;
-        }
-
-        DetailDTO target = new DetailDTO();
-        target.setId(source.getId());
-        target.setCreateTime(source.getCreateTime());
-        target.setUpdateTime(source.getUpdateTime());
-        target.setUserId(source.getUserId());
-        target.setConfigId(source.getConfigId());
-        target.setChannelCode(source.getChannelCode());
-        target.setTotal(source.getTotal());
-        target.setUsed(source.getUsed());
-        target.setSource(source.getSource());
-        target.setUniqueSourceId(target.getUniqueSourceId());
-        target.setBizId(source.getBizId());
-        target.setBizDescription(source.getBizDescription());
-        return target;
     }
 }

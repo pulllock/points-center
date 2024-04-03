@@ -5,11 +5,9 @@ import fun.pullock.api.model.param.GrantParam;
 import fun.pullock.api.model.param.ReclaimParam;
 import fun.pullock.api.model.param.RollbackParam;
 import fun.pullock.api.model.param.UseParam;
-import fun.pullock.api.model.result.ExpirationRule;
 import fun.pullock.api.model.result.PointsConfig;
 import fun.pullock.general.model.ServiceException;
-import fun.pullock.points.core.model.dto.ConfigDTO;
-import fun.pullock.points.core.model.dto.ExpirationRuleDTO;
+import fun.pullock.points.core.converters.ConfigConverter;
 import fun.pullock.points.core.service.PointsService;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
@@ -186,37 +184,6 @@ public class PointsClientController implements PointsClient {
 
     @Override
     public List<PointsConfig> configs() {
-        return pointsService.configs().stream().map(this::toPointsConfig).collect(Collectors.toList());
-    }
-
-    private PointsConfig toPointsConfig(ConfigDTO source) {
-        if (source == null) {
-            return null;
-        }
-
-        PointsConfig target = new PointsConfig();
-        target.setId(source.getId());
-        target.setCreateTime(source.getCreateTime());
-        target.setUpdateTime(source.getUpdateTime());
-        target.setChannelCode(source.getChannelCode());
-        target.setName(source.getName());
-        target.setDescription(source.getDescription());
-        target.setStatus(source.getStatus());
-        target.setType(source.getType());
-        target.setStock(source.getStock());
-        target.setExpirationRule(toExpirationRule(source.getExpirationRule()));
-        return target;
-    }
-
-    private ExpirationRule toExpirationRule(ExpirationRuleDTO source) {
-        if (source == null) {
-            return null;
-        }
-
-        ExpirationRule target = new ExpirationRule();
-        target.setType(source.getType());
-        target.setDays(source.getDays());
-        target.setExpirationTime(source.getExpirationTime());
-        return target;
+        return pointsService.configs().stream().map(ConfigConverter::toPointsConfig).collect(Collectors.toList());
     }
 }

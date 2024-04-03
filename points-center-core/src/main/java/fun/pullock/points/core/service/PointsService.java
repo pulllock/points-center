@@ -5,9 +5,13 @@ import fun.pullock.api.model.param.ReclaimParam;
 import fun.pullock.api.model.param.RollbackParam;
 import fun.pullock.api.model.param.UseParam;
 import fun.pullock.general.model.ServiceException;
+import fun.pullock.points.core.converters.DetailConverter;
+import fun.pullock.points.core.converters.LogConverter;
 import fun.pullock.points.core.dao.mapper.UserPointsMapper;
 import fun.pullock.points.core.dao.model.UserPointsDO;
-import fun.pullock.points.core.model.app.vo.*;
+import fun.pullock.points.core.model.app.vo.DetailVO;
+import fun.pullock.points.core.model.app.vo.HistoryVO;
+import fun.pullock.points.core.model.app.vo.SummaryVO;
 import fun.pullock.points.core.model.dto.*;
 import fun.pullock.starter.json.Json;
 import fun.pullock.starter.redis.lock.RedisLock;
@@ -25,6 +29,7 @@ import java.util.stream.Collectors;
 
 import static fun.pullock.api.enums.ErrorCode.CONCURRENCY_ERROR;
 import static fun.pullock.api.enums.ErrorCode.PARAM_ERROR;
+import static fun.pullock.points.core.converters.UserPointsConverter.toSummaryVO;
 import static fun.pullock.points.core.enums.ConfigStatus.ENABLE;
 import static fun.pullock.points.core.enums.ConfigType.UNLIMITED;
 import static fun.pullock.points.core.enums.ExpirationRuleType.FIX;
@@ -120,7 +125,7 @@ public class PointsService {
             List<LogDetailDTO> logDetails = new ArrayList<>();
             // 删除这些记录
             if (CollectionUtils.isNotEmpty(using)) {
-                logDetails.addAll(using.stream().map(this::toLogDetailDTO).collect(Collectors.toList()));
+                logDetails.addAll(using.stream().map(LogConverter::toLogDetailDTO).collect(Collectors.toList()));
                 detailService.deleteByIds(using.stream().map(DetailDTO::getId).collect(Collectors.toList()));
             }
 
@@ -226,7 +231,7 @@ public class PointsService {
                 points.getTotal() - points.getUsed() - points.getExpired(),
                 detailService.queryDetail(userId)
                         .stream()
-                        .map(this::toDetailVO)
+                        .map(DetailConverter::toDetailVO)
                         .collect(Collectors.toList())
         );
     }
@@ -238,69 +243,12 @@ public class PointsService {
         }
 
         return new HistoryVO(
-                logService.history(userId).stream().map(this::toLogVO).collect(Collectors.toList())
+                logService.history(userId).stream().map(LogConverter::toLogVO).collect(Collectors.toList())
         );
     }
 
     public List<ConfigDTO> configs() {
         return configService.configs();
-    }
-
-    private LogVO toLogVO(LogDTO source) {
-        if (source == null) {
-            return null;
-        }
-
-        LogVO target = new LogVO();
-        target.setCreateTime(source.getCreateTime());
-        target.setType(source.getType());
-        target.setNumber(source.getNumber());
-        target.setBizDescription(source.getBizDescription());
-        target.setDetails(source.getDetail().stream().map(this::toLogDetailVO).collect(Collectors.toList()));
-        return target;
-    }
-
-    private LogDetailVO toLogDetailVO(LogDetailDTO source) {
-        if (source == null) {
-            return null;
-        }
-
-        LogDetailVO target = new LogDetailVO();
-        target.setCreateTime(source.getCreateTime());
-        target.setExpireTime(source.getExpireTime());
-        target.setTotal(source.getTotal());
-        target.setUsed(source.getUsed());
-        target.setCurrentUsed(source.getCurrentUsed());
-        target.setBizDescription(source.getBizDescription());
-        return target;
-    }
-
-    private PointsDetailVO toDetailVO(DetailDTO source) {
-        if (source == null) {
-            return null;
-        }
-
-        PointsDetailVO target = new PointsDetailVO();
-        target.setCreateTime(source.getCreateTime());
-        target.setExpireTime(source.getExpireTime());
-        target.setTotal(source.getTotal());
-        target.setUsed(source.getUsed());
-        target.setAvailable(source.getTotal() - source.getUsed());
-        target.setBizDescription(source.getBizDescription());
-        return target;
-    }
-
-    private SummaryVO toSummaryVO(UserPointsDO source) {
-        if (source == null) {
-            return null;
-        }
-
-        SummaryVO target = new SummaryVO();
-        target.setTotal(source.getTotal());
-        target.setUsed(source.getUsed());
-        target.setExpired(source.getExpired());
-        target.setAvailable(source.getTotal() - source.getUsed() - source.getExpired());
-        return target;
     }
 
     private LogDTO checkOriginLog(RollbackParam param) {
@@ -400,18 +348,6 @@ public class PointsService {
         if (log != null) {
             throw new ServiceException(CONCURRENCY_ERROR, "重复请求");
         }
-    }
-
-    private LogDetailDTO toLogDetailDTO(DetailDTO source) {
-        if (source == null) {
-            return null;
-        }
-
-        LogDetailDTO target = new LogDetailDTO();
-        BeanUtils.copyProperties(source, target);
-        target.setUsed(source.getTotal());
-        target.setCurrentUsed(source.getTotal() - source.getUsed());
-        return target;
     }
 
     private void updateLogDetail(List<LogDetailDTO> using, LogDTO log) {
