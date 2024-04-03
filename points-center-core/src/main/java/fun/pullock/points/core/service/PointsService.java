@@ -60,7 +60,7 @@ public class PointsService {
     @Transactional
     public boolean grant(GrantParam param) {
         // 检查是否重复请求
-        checkLog(param);
+        checkLog(param.getUserId(), param.getSource(), param.getUniqueSourceId());
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -87,7 +87,7 @@ public class PointsService {
     @Transactional
     public boolean use(UseParam param) {
         // 检查是否重复请求
-        checkLog(param);
+        checkLog(param.getUserId(), param.getSource(), param.getUniqueSourceId());
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -159,7 +159,7 @@ public class PointsService {
         LogDTO origin = checkOriginLog(param);
 
         // 检查是否重复请求
-        checkLog(param);
+        checkLog(param.getUserId(), param.getSource(), param.getUniqueSourceId());
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -284,16 +284,6 @@ public class PointsService {
         return log;
     }
 
-    private void checkLog(RollbackParam param) {
-        // 查询积分日志
-        LogDTO log = logService.queryByUniqueKey(
-                param.getUserId(), param.getSource(), param.getUniqueSourceId()
-        );
-        if (log != null) {
-            throw new ServiceException(CONCURRENCY_ERROR, "重复请求");
-        }
-    }
-
     private long useUnlimited(UseParam param, long total, List<DetailDTO> using) {
         // 查询永久积分
         List<DetailDTO> unLimited = queryUnlimited(param);
@@ -338,16 +328,6 @@ public class PointsService {
                 .filter(d -> !Objects.equals(d.getTotal(), d.getUsed()))
                 .collect(Collectors.toList());
         return expiring;
-    }
-
-    private void checkLog(UseParam param) {
-        // 查询积分日志
-        LogDTO log = logService.queryByUniqueKey(
-                param.getUserId(), param.getSource(), param.getUniqueSourceId()
-        );
-        if (log != null) {
-            throw new ServiceException(CONCURRENCY_ERROR, "重复请求");
-        }
     }
 
     private void updateLogDetail(List<LogDetailDTO> using, LogDTO log) {
@@ -483,10 +463,10 @@ public class PointsService {
         return log;
     }
 
-    private void checkLog(GrantParam param) {
+    private void checkLog(Long userId, String source, String uniqueSourceId) {
         // 查询积分日志
         LogDTO log = logService.queryByUniqueKey(
-                param.getUserId(), param.getSource(), param.getUniqueSourceId()
+                userId, source, uniqueSourceId
         );
         if (log != null) {
             throw new ServiceException(CONCURRENCY_ERROR, "重复请求");
