@@ -146,6 +146,15 @@
                 </dependencies>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <configuration>
+                    <!-- 指定当前模块不打包源码 -->
+                    <skipSource>true</skipSource>
+                </configuration>
+            </plugin>
+
             <!-- 在Maven中使用Groovy的插件 -->
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
