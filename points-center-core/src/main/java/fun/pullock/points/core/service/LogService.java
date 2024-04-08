@@ -1,6 +1,6 @@
 package fun.pullock.points.core.service;
 
-import fun.pullock.api.enums.ErrorCode;
+import fun.pullock.points.api.enums.ErrorCode;
 import fun.pullock.general.model.ServiceException;
 import fun.pullock.points.core.converters.LogConverter;
 import fun.pullock.points.core.dao.mapper.UserPointsLogMapper;

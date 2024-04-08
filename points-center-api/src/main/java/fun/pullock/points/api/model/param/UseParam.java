@@ -1,12 +1,10 @@
-package fun.pullock.api.model.param;
+package fun.pullock.points.api.model.param;
 
 import java.io.Serializable;
 
-public class GrantParam implements Serializable {
+public class UseParam implements Serializable {
 
     private Long userId;
-
-    private Long configId;
 
     private String channelCode;
 
@@ -26,14 +24,6 @@ public class GrantParam implements Serializable {
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-    public Long getConfigId() {
-        return configId;
-    }
-
-    public void setConfigId(Long configId) {
-        this.configId = configId;
     }
 
     public String getChannelCode() {
@@ -86,9 +76,8 @@ public class GrantParam implements Serializable {
 
     @Override
     public String toString() {
-        return "GrantParam{" +
+        return "UseParam{" +
                 "userId=" + userId +
-                ", configId=" + configId +
                 ", channelCode='" + channelCode + '\'' +
                 ", number=" + number +
                 ", source='" + source + '\'' +

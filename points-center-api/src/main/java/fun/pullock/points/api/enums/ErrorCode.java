@@ -1,4 +1,4 @@
-package fun.pullock.api.enums;
+package fun.pullock.points.api.enums;
 
 import fun.pullock.general.model.BaseErrorCode;
 

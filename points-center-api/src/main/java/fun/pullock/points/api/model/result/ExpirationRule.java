@@ -1,4 +1,4 @@
-package fun.pullock.api.model.result;
+package fun.pullock.points.api.model.result;
 
 import java.time.LocalDateTime;
 

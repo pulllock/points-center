@@ -1,10 +1,10 @@
-package fun.pullock.api.client;
+package fun.pullock.points.api.client;
 
-import fun.pullock.api.model.param.GrantParam;
-import fun.pullock.api.model.param.ReclaimParam;
-import fun.pullock.api.model.param.RollbackParam;
-import fun.pullock.api.model.param.UseParam;
-import fun.pullock.api.model.result.PointsConfig;
+import fun.pullock.points.api.model.param.GrantParam;
+import fun.pullock.points.api.model.param.ReclaimParam;
+import fun.pullock.points.api.model.param.RollbackParam;
+import fun.pullock.points.api.model.param.UseParam;
+import fun.pullock.points.api.model.result.PointsConfig;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

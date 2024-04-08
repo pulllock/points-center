@@ -1,18 +1,18 @@
-package fun.pullock.api.model.param;
+package fun.pullock.points.api.model.param;
 
 import java.io.Serializable;
 
-public class ReclaimParam implements Serializable {
+public class RollbackParam implements Serializable {
 
     private Long userId;
 
     private String channelCode;
 
-    private Long number;
-
     private String source;
 
     private String uniqueSourceId;
+
+    private String originUniqueSourceId;
 
     private Long bizId;
 
@@ -34,14 +34,6 @@ public class ReclaimParam implements Serializable {
         this.channelCode = channelCode;
     }
 
-    public Long getNumber() {
-        return number;
-    }
-
-    public void setNumber(Long number) {
-        this.number = number;
-    }
-
     public String getSource() {
         return source;
     }
@@ -56,6 +48,14 @@ public class ReclaimParam implements Serializable {
 
     public void setUniqueSourceId(String uniqueSourceId) {
         this.uniqueSourceId = uniqueSourceId;
+    }
+
+    public String getOriginUniqueSourceId() {
+        return originUniqueSourceId;
+    }
+
+    public void setOriginUniqueSourceId(String originUniqueSourceId) {
+        this.originUniqueSourceId = originUniqueSourceId;
     }
 
     public Long getBizId() {
@@ -76,12 +76,12 @@ public class ReclaimParam implements Serializable {
 
     @Override
     public String toString() {
-        return "ReclaimParam{" +
+        return "RollbackParam{" +
                 "userId=" + userId +
                 ", channelCode='" + channelCode + '\'' +
-                ", number=" + number +
                 ", source='" + source + '\'' +
                 ", uniqueSourceId='" + uniqueSourceId + '\'' +
+                ", originUniqueSourceId='" + originUniqueSourceId + '\'' +
                 ", bizId=" + bizId +
                 ", bizDescription='" + bizDescription + '\'' +
                 '}';

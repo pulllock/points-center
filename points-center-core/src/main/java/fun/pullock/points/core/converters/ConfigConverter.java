@@ -1,7 +1,7 @@
 package fun.pullock.points.core.converters;
 
-import fun.pullock.api.model.result.ExpirationRule;
-import fun.pullock.api.model.result.PointsConfig;
+import fun.pullock.points.api.model.result.ExpirationRule;
+import fun.pullock.points.api.model.result.PointsConfig;
 import fun.pullock.points.core.dao.model.PointsConfigDO;
 import fun.pullock.points.core.model.dto.ConfigDTO;
 import fun.pullock.points.core.model.dto.ExpirationRuleDTO;

@@ -1,11 +1,11 @@
 package fun.pullock.points.core.controller.client;
 
-import fun.pullock.api.client.PointsClient;
-import fun.pullock.api.model.param.GrantParam;
-import fun.pullock.api.model.param.ReclaimParam;
-import fun.pullock.api.model.param.RollbackParam;
-import fun.pullock.api.model.param.UseParam;
-import fun.pullock.api.model.result.PointsConfig;
+import fun.pullock.points.api.client.PointsClient;
+import fun.pullock.points.api.model.param.GrantParam;
+import fun.pullock.points.api.model.param.ReclaimParam;
+import fun.pullock.points.api.model.param.RollbackParam;
+import fun.pullock.points.api.model.param.UseParam;
+import fun.pullock.points.api.model.result.PointsConfig;
 import fun.pullock.general.model.ServiceException;
 import fun.pullock.points.core.converters.ConfigConverter;
 import fun.pullock.points.core.service.PointsService;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static fun.pullock.api.enums.ErrorCode.PARAM_ERROR;
+import static fun.pullock.points.api.enums.ErrorCode.PARAM_ERROR;
 
 @RestController
 public class PointsClientController implements PointsClient {

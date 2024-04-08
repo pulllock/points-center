@@ -1,9 +1,9 @@
 package fun.pullock.points.core.service;
 
-import fun.pullock.api.model.param.GrantParam;
-import fun.pullock.api.model.param.ReclaimParam;
-import fun.pullock.api.model.param.RollbackParam;
-import fun.pullock.api.model.param.UseParam;
+import fun.pullock.points.api.model.param.GrantParam;
+import fun.pullock.points.api.model.param.ReclaimParam;
+import fun.pullock.points.api.model.param.RollbackParam;
+import fun.pullock.points.api.model.param.UseParam;
 import fun.pullock.general.model.ServiceException;
 import fun.pullock.points.core.converters.DetailConverter;
 import fun.pullock.points.core.converters.LogConverter;
@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static fun.pullock.api.enums.ErrorCode.CONCURRENCY_ERROR;
-import static fun.pullock.api.enums.ErrorCode.PARAM_ERROR;
+import static fun.pullock.points.api.enums.ErrorCode.CONCURRENCY_ERROR;
+import static fun.pullock.points.api.enums.ErrorCode.PARAM_ERROR;
 import static fun.pullock.points.core.converters.UserPointsConverter.toSummaryVO;
 import static fun.pullock.points.core.enums.ConfigStatus.ENABLE;
 import static fun.pullock.points.core.enums.ConfigType.UNLIMITED;
